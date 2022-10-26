@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"easy_im/client/pkg"
 	"easy_im/pb"
 	"easy_im/pkg/log"
 	"fmt"
@@ -16,8 +17,9 @@ type ListUsersHandler struct {
 }
 
 func (l *ListUsersHandler) Handle(request client_int.IRequest) {
+	output, _ := pkg.BizCoderImpl.Decode(request.GetData())
 	resp := &pb.ListUsersResponse{}
-	err := proto.Unmarshal(request.GetData(), resp)
+	err := proto.Unmarshal(output.GetData(), resp)
 	if err != nil {
 		log.Error(fmt.Sprintf("Unmarshal error: %v", err), ModuleNameListUsers)
 		return

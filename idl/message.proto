@@ -2,6 +2,7 @@ syntax = "proto3";
 package pb;
 option go_package = "./pb";
 
+//  protoc --go_out=. ./idl/*
 // 上行数据
 message Input {
   int64 request_id = 1; // 请求id

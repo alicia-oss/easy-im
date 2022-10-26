@@ -17,13 +17,14 @@ type OnlineHandler struct {
 }
 
 func (l *OnlineHandler) Handle(request client_int.IRequest) {
+	output, _ := pkg.BizCoderImpl.Decode(request.GetData())
 	message := &pb.OnlineResponse{}
-	err := proto.Unmarshal(request.GetData(), message)
+	err := proto.Unmarshal(output.GetData(), message)
 	if err != nil {
 		log.Error(fmt.Sprintf("Unmarshal error: %v", err), ModuleNameOnline)
 		return
 	}
-	fmt.Printf("online... your user_id:%v, user_name:%v \n", message.UserId, message.GetUserName())
+	fmt.Printf("online... your user_id:%v, user_name:%v \n", message.GetUserId(), message.GetUserName())
 	request.GetClient().SetAttr(pkg.AttrUserId, message.GetUserId())
 	request.GetClient().SetAttr(pkg.AttrUserName, message.GetUserName())
 }

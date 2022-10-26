@@ -2,21 +2,25 @@ package api
 
 import (
 	"easy_im/pb"
-	"easy_im/pkg/log"
+	"easy_im/pkg/biz_coder"
 	"easy_im/service"
-	"fmt"
-	"github.com/alicia-oss/jinx/jinx_imp"
 	"github.com/alicia-oss/jinx/jinx_int"
 	"google.golang.org/protobuf/proto"
 )
 
 const ModuleNameListUsers = "handler_list_users"
 
-type ListUsersHandler struct {
-	jinx_imp.BaseMsgHandler
+func NewListUsersHandler() jinx_int.IMsgHandle {
+	return &TemplateHandler{
+		BizCoder:   biz_coder.BizCoder{},
+		BizHandler: listUsersHandler{},
+	}
 }
 
-func (u *ListUsersHandler) Handle(request jinx_int.IRequest) {
+type listUsersHandler struct {
+}
+
+func (u listUsersHandler) HandleBiz(request jinx_int.IRequest, bytes []byte) (proto.Message, uint32, error) {
 	users := service.EasyIMUserManager.GetAllUser()
 	var res []*pb.UserInfo
 	for _, user := range users {
@@ -26,10 +30,6 @@ func (u *ListUsersHandler) Handle(request jinx_int.IRequest) {
 		}
 		res = append(res, t)
 	}
-	resp := pb.ListUsersResponse{UserInfos: res}
-	bytes, _ := proto.Marshal(&resp)
-	err := request.GetConnection().Send(bytes, uint32(pb.MessageType_LIST_USERS))
-	if err != nil {
-		log.Error(fmt.Sprintf("send error:%v", err), ModuleNameListUsers)
-	}
+	resp := &pb.ListUsersResponse{UserInfos: res}
+	return resp, uint32(pb.MessageType_LIST_USERS), nil
 }

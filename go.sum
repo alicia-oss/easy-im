@@ -8,6 +8,8 @@ github.com/alicia-oss/jinx v0.0.0-20221024083312-6f955465b022 h1:MDDG37VnoJn0A30
 github.com/alicia-oss/jinx v0.0.0-20221024083312-6f955465b022/go.mod h1:UkCi86sS7gisAP/anBoxQ1IuQPQr2wY9HLVLHQwvkt4=
 github.com/alicia-oss/jinx v0.0.0-20221024093118-442dd7b00254 h1:n++y0pDm4PQ+VcdYUlyTvapV3T2aIhmglVfpP5i9eEY=
 github.com/alicia-oss/jinx v0.0.0-20221024093118-442dd7b00254/go.mod h1:UkCi86sS7gisAP/anBoxQ1IuQPQr2wY9HLVLHQwvkt4=
+github.com/alicia-oss/jinx v0.0.0-20221026093113-94b93b2dcaaf h1:sJyOJNZCoxObE+QDYbCX+wId01Ebu+7J9jYVq6pmZb0=
+github.com/alicia-oss/jinx v0.0.0-20221026093113-94b93b2dcaaf/go.mod h1:UkCi86sS7gisAP/anBoxQ1IuQPQr2wY9HLVLHQwvkt4=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/golang/protobuf v1.5.0/go.mod h1:FsONVRAS9T7sI+LIUmWTfcYkHO4aIWwzhcaSAoJOfIk=

@@ -7,6 +7,7 @@ import (
 	client_imp "github.com/alicia-oss/jinx/client/imp"
 	client_int "github.com/alicia-oss/jinx/client/int"
 	"google.golang.org/protobuf/proto"
+	"math/rand"
 )
 
 func NewClient(userName string) (IClient, error) {
@@ -19,6 +20,8 @@ func NewClient(userName string) (IClient, error) {
 	}
 
 	c.AddRoute(uint32(pb.MessageType_LIST_USERS), &handler.ListUsersHandler{})
+	c.AddRoute(uint32(pb.MessageType_OFFLINE), &handler.OfflineMessageHandler{})
+	c.AddRoute(uint32(pb.MessageType_SEND_MESSAGE), &handler.SendMessageHandler{})
 	c.AddRoute(uint32(pb.MessageType_RECEIVE_MESSAGE), &handler.ReceiveMessageHandler{})
 	c.AddRoute(uint32(pb.MessageType_ONLINE), &handler.OnlineHandler{})
 	c.Start()
@@ -28,6 +31,7 @@ func NewClient(userName string) (IClient, error) {
 
 type client struct {
 	client_int.IClient
+	bizCoder pkg.BizCoder
 }
 
 func (c *client) Online(userName string) {
@@ -79,4 +83,9 @@ func (c *client) SetUserId(uId uint32) {
 }
 func (c *client) SetUserName(name string) {
 	c.SetAttr(pkg.AttrUserName, name)
+}
+
+func (c *client) Send(data []byte, msgId uint32) error {
+	encode := c.bizCoder.Encode(data, rand.Int63())
+	return c.IClient.Send(encode, msgId)
 }
