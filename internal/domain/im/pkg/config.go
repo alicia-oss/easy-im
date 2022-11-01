@@ -6,6 +6,7 @@ const (
 	ModuleNameRepoUserSeq    = "domain_im_repo_user_seq"
 	ModuleNameServiceUserSeq = "domain_im_service_user_seq"
 	ModuleNameRepoGroup      = "domain_im_repo_group"
+	ModuleNameRepoGroupUser  = "domain_im_repo_group_user"
 	ModuleNameServiceGroup   = "domain_im_service_group"
 	ModuleNameRepoMessage    = "domain_im_repo_message"
 	ModuleNameServiceMessage = "domain_im_service_message"
