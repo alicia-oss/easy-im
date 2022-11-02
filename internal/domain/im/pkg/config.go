@@ -12,6 +12,27 @@ const (
 	ModuleNameServiceMessage = "domain_im_service_message"
 )
 
+const (
+	MessageState_SENT = iota
+	MessageState_DELIVERED
+	MessageState_SEEN
+)
+
+const (
+	MessageType_TXT = iota
+	MessageType_IMG
+)
+
+const (
+	SenderType_USER = iota
+	SenderType_SYSTEM
+)
+
+const (
+	ReceiverType_USER = iota
+	ReceiverType_GROUP
+)
+
 var (
 	ErrUnknown = errors.New("unknown internal error")
 )

@@ -4,6 +4,7 @@ import (
 	"easy_im/internal/domain/im/model"
 	"easy_im/internal/domain/im/pkg"
 	"easy_im/internal/domain/im/repo"
+	"gorm.io/gorm"
 )
 
 type IGroupService interface {
@@ -75,7 +76,7 @@ func (g *groupServiceImpl) CreateGroup(group *model.Group) error {
 }
 
 func (g *groupServiceImpl) DeleteGroup(groupId uint) error {
-	err := g.groupRepo.Delete(groupId)
+	err := g.groupRepo.Delete(&model.Group{Model: gorm.Model{ID: groupId}})
 	if err != nil {
 		return pkg.ErrUnknown
 	}

@@ -14,7 +14,7 @@ type IGroupRepo interface {
 	Get(id uint) (*model.Group, error)
 	GetByIds(ids []uint) ([]*model.Group, error)
 	Save(group *model.Group) error
-	Delete(id uint) error
+	Delete(g *model.Group) error
 }
 
 type groupRepoImpl struct{}
@@ -62,8 +62,8 @@ func (*groupRepoImpl) Save(group *model.Group) error {
 	return nil
 }
 
-func (*groupRepoImpl) Delete(id uint) error {
-	if err := db.DB.Delete(&model.Group{}, id).Error; err != nil {
+func (*groupRepoImpl) Delete(g *model.Group) error {
+	if err := db.DB.Delete(g).Error; err != nil {
 		log.Error(fmt.Sprintf("Delete error :%v", err), pkg.ModuleNameRepoGroup)
 		return err
 	}

@@ -28,7 +28,7 @@ func (*GroupUser) TableName() string { return "group_user" }
 func init() {
 	err := db.DB.AutoMigrate(&Group{}, &GroupUser{})
 	if err != nil {
-		log.Error(fmt.Sprintf("user init err:%v", err), "domain_user_model")
+		log.Error(fmt.Sprintf("group, group_user init err:%v", err), "domain_user_model")
 		panic(err.Error())
 	}
 }

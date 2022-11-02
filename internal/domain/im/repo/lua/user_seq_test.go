@@ -35,7 +35,7 @@ return curSeq
 			fmt.Println(err)
 			return
 		}
-		res := redis.Client.EvalSha(sha, []string{model.BuildSeqKey(10)})
+		res := redis.Client.EvalSha(sha, []string{model.BuildUserSeqKey(10)})
 		fmt.Println(res)
 
 	})

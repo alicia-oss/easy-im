@@ -1,6 +1,7 @@
 package service
 
 import (
+	"easy_im/internal/domain/im/model"
 	"easy_im/internal/domain/im/pkg"
 	"easy_im/internal/domain/im/repo"
 	"easy_im/pkg/log"
@@ -8,14 +9,27 @@ import (
 )
 
 type IUserSeqService interface {
-	GenSeq(userId uint) uint64
+	GenSeq(userId uint) (uint, error)
+	CreateSeqBox(userId uint) error
 }
 
 type userSeqServiceImpl struct {
 	userSeqRepo repo.IUserSeqRepo
 }
 
-func (u *userSeqServiceImpl) GenSeq(userId uint) (uint64, error) {
+func (u *userSeqServiceImpl) CreateSeqBox(userId uint) error {
+	seq := &model.UserSeq{
+		UserId: userId,
+		MaxSeq: 100,
+	}
+	err := u.userSeqRepo.Add(seq)
+	if err != nil {
+		return pkg.ErrUnknown
+	}
+	return nil
+}
+
+func (u *userSeqServiceImpl) GenSeq(userId uint) (uint, error) {
 	seq, err := u.userSeqRepo.RGetUserSeq(userId)
 	if err != nil {
 		return 0, pkg.ErrUnknown

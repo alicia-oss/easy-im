@@ -12,8 +12,8 @@ import (
 
 type UserSeq struct {
 	gorm.Model
-	UserId uint   `gorm:"not null;"`
-	MaxSeq uint64 `gorm:"not null;"`
+	UserId uint `gorm:"not null;uniqueIndex;"`
+	MaxSeq uint `gorm:"not null;"`
 }
 
 func (*UserSeq) TableName() string { return "user_seq" }
@@ -28,18 +28,22 @@ func init() {
 // redis
 //{
 //	type:string
-//	key: message:seq:user_id
+//	key: message:seq_user:user_id  ( message:seq_group:group_id)
 //	value : cur_seq:max_seq
 //}
 
 func GetSeqTTL() time.Duration {
-	return 24 * time.Hour
+	return 7 * 24 * time.Hour
 }
 
-func BuildSeqValue(curSeq, maxSeq uint64) string {
+func BuildSeqValue(curSeq, maxSeq uint) string {
 	return fmt.Sprintf("%v:%v", curSeq, maxSeq)
 }
 
-func BuildSeqKey(userId uint) string {
-	return fmt.Sprintf("message:seq:%v", userId)
+func BuildUserSeqKey(userId uint) string {
+	return fmt.Sprintf("message:seq_user:%v", userId)
+}
+
+func BuildGroupSeqKey(groupId uint) string {
+	return fmt.Sprintf("message:seq_group:%v", groupId)
 }

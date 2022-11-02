@@ -18,8 +18,8 @@ type IUserSeqRepo interface {
 	Delete(id uint) error
 	GetByUserId(userId uint) (*model.UserSeq, error)
 
-	RSetUserSeq(userId uint, curSeq uint64, maxSeq uint64) error
-	RGetUserSeq(userId uint) (uint64, error)
+	RSetUserSeq(userId uint, curSeq uint, maxSeq uint) error
+	RGetUserSeq(userId uint) (uint, error)
 }
 
 func NewUserRepo() IUserSeqRepo {
@@ -28,8 +28,8 @@ func NewUserRepo() IUserSeqRepo {
 
 type userSeqRepoImpl struct{}
 
-func (i *userSeqRepoImpl) RSetUserSeq(userId uint, curSeq uint64, maxSeq uint64) error {
-	key := model.BuildSeqKey(userId)
+func (i *userSeqRepoImpl) RSetUserSeq(userId uint, curSeq uint, maxSeq uint) error {
+	key := model.BuildUserSeqKey(userId)
 	value := model.BuildSeqValue(curSeq, maxSeq)
 	_, err := redis.Client.Set(key, value, model.GetSeqTTL()).Result()
 	if err != nil {
@@ -38,8 +38,8 @@ func (i *userSeqRepoImpl) RSetUserSeq(userId uint, curSeq uint64, maxSeq uint64)
 	return err
 }
 
-func (i *userSeqRepoImpl) RGetUserSeq(userId uint) (uint64, error) {
-	return lua.GetSeq(model.BuildSeqKey(userId))
+func (i *userSeqRepoImpl) RGetUserSeq(userId uint) (uint, error) {
+	return lua.GetSeq(model.BuildUserSeqKey(userId))
 }
 
 func (*userSeqRepoImpl) Add(seq *model.UserSeq) error {

@@ -31,11 +31,11 @@ func init() {
 	getSeq, _ = redis.Client.ScriptLoad(getSeqScript).Result()
 }
 
-func GetSeq(key string) (uint64, error) {
+func GetSeq(key string) (uint, error) {
 	result, err := redis.Client.EvalSha(getSeq, []string{key}).Result()
 	if err != nil {
 		log.Error(fmt.Sprintf("GetSeq error;%v", err), pkg.ModuleNameRepoUserSeq)
 		return 0, err
 	}
-	return result.(uint64), nil
+	return result.(uint), nil
 }
