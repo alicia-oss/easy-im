@@ -1,8 +1,8 @@
 package repo
 
 import (
-	"easy_im/internal/domain/message/model"
-	"easy_im/internal/domain/message/pkg"
+	"easy_im/internal/domain/im/model"
+	"easy_im/internal/domain/im/pkg"
 	"easy_im/pkg/db"
 	"easy_im/pkg/log"
 	"easy_im/pkg/redis"

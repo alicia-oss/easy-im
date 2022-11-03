@@ -1,7 +1,7 @@
 package user_int
 
 type IUser interface {
-	GetUserId() uint
+	GetUserId() uint32
 	GetUserName() string
 	GetUserIP() string
 	Offline()

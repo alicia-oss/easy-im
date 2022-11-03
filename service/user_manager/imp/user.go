@@ -18,7 +18,7 @@ type user struct {
 	userManager user_int.IUserManager
 }
 
-func (u *user) GetUserId() uint {
+func (u *user) GetUserId() uint32 {
 	return u.userId
 }
 
