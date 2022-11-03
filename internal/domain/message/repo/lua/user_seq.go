@@ -1,7 +1,7 @@
 package lua
 
 import (
-	"easy_im/internal/domain/im/pkg"
+	"easy_im/internal/domain/message/pkg"
 	"easy_im/pkg/log"
 	"easy_im/pkg/redis"
 	"fmt"

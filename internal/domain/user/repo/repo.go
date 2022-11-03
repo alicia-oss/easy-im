@@ -9,15 +9,13 @@ import (
 	"gorm.io/gorm"
 )
 
-var Repo = NewUserRepo()
-
 type IUserRepo interface {
 	Add(user *model.User) error
-	Get(userId uint) (*model.User, error)
+	Get(userId uint64) (*model.User, error)
 	Save(user *model.User) error
-	Delete(userId uint) error
+	Delete(userId uint64) error
 	GetByUsername(username string) (*model.User, error)
-	GetByIds(userIds []int64) ([]*model.User, error)
+	GetByIds(userIds []uint64) ([]*model.User, error)
 	Search(key string) ([]*model.User, error)
 }
 
@@ -38,9 +36,9 @@ func (*userRepoImpl) Add(user *model.User) error {
 }
 
 // Get 获取用户信息
-func (*userRepoImpl) Get(userId uint) (*model.User, error) {
+func (*userRepoImpl) Get(userId uint64) (*model.User, error) {
 	var user = model.User{
-		Model: gorm.Model{ID: userId},
+		ID: userId,
 	}
 	err := db.DB.First(&user).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
@@ -63,7 +61,7 @@ func (*userRepoImpl) Save(user *model.User) error {
 	return nil
 }
 
-func (*userRepoImpl) Delete(userId uint) error {
+func (*userRepoImpl) Delete(userId uint64) error {
 	if err := db.DB.Delete(&model.User{}, userId).Error; err != nil {
 		log.Error(fmt.Sprintf("Delete error :%v", err), pkg.ModuleNameRepo)
 		return err
@@ -86,7 +84,7 @@ func (*userRepoImpl) GetByUsername(username string) (*model.User, error) {
 }
 
 // GetByIds 获取用户信息
-func (*userRepoImpl) GetByIds(userIds []int64) ([]*model.User, error) {
+func (*userRepoImpl) GetByIds(userIds []uint64) ([]*model.User, error) {
 	var users []*model.User
 	err := db.DB.Find(&users, "id in (?)", userIds).Error
 	if err != nil {
