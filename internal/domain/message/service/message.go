@@ -1,9 +1,9 @@
 package service
 
 import (
-	"easy_im/internal/domain/im/model"
-	"easy_im/internal/domain/im/pkg"
-	"easy_im/internal/domain/im/repo"
+	"easy_im/internal/domain/message/model"
+	"easy_im/internal/domain/message/pkg"
+	"easy_im/internal/domain/message/repo"
 	"easy_im/pkg/log"
 )
 
@@ -22,7 +22,7 @@ type messageServiceImpl struct {
 	msgRepo repo.IMessageRepo
 }
 
-func (m *messageServiceImpl) SendMessage(message *model.Message) error {
+func (m *messageServiceImpl) SaveMessage(message *model.Message) error {
 	err := m.msgRepo.Save(message)
 	if err != nil {
 		return pkg.ErrUnknown
@@ -31,7 +31,6 @@ func (m *messageServiceImpl) SendMessage(message *model.Message) error {
 	if err != nil {
 		return pkg.ErrUnknown
 	}
-	// 写入kafka
 	return nil
 }
 

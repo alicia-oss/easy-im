@@ -1,9 +1,9 @@
 package service
 
 import (
-	"easy_im/internal/domain/im/model"
-	"easy_im/internal/domain/im/pkg"
-	"easy_im/internal/domain/im/repo"
+	"easy_im/internal/domain/message/model"
+	"easy_im/internal/domain/message/pkg"
+	"easy_im/internal/domain/message/repo"
 	"easy_im/pkg/log"
 	"fmt"
 )
