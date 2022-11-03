@@ -9,14 +9,17 @@ import (
 )
 
 type Message struct {
-	gorm.Model
+	ID           uint64 `gorm:"primarykey"`
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
+	DeletedAt    gorm.DeletedAt `gorm:"index"`
 	SenderType   int8
-	SenderId     uint
+	SenderId     uint64
 	ReceiverType int8
-	ReceiverId   uint
+	ReceiverId   uint64
 	Type         int8
 	Content      []byte
-	Seq          uint
+	Seq          uint64
 	State        int8
 	SentTime     time.Time
 	DeliverTime  time.Time
@@ -45,10 +48,10 @@ func init() {
 	range seq: zrangebyscore message:inbox:10 100000001 1000000010
 */
 
-func BuildInboxKey(userId uint) string {
+func BuildInboxKey(userId uint64) string {
 	return fmt.Sprintf("message:inbox:%v", userId)
 }
 
-func BuildInboxCore(senderId, seq uint) float64 {
+func BuildInboxCore(senderId, seq uint64) float64 {
 	return float64(senderId*100000000 + seq)
 }

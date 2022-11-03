@@ -11,11 +11,15 @@ import (
 
 type IGroupUserRepo interface {
 	Add(gu *model.GroupUser) error
-	Get(id uint) (*model.GroupUser, error)
+	Get(id uint64) (*model.GroupUser, error)
 	Save(gu *model.GroupUser) error
 	Delete(gu *model.GroupUser) error
-	GetByGroupId(id uint) ([]*model.GroupUser, error)
-	GetByUserId(id uint) ([]*model.GroupUser, error)
+	GetByGroupId(id uint64) ([]*model.GroupUser, error)
+	GetByUserId(id uint64) ([]*model.GroupUser, error)
+}
+
+func NewGroupUserRepo() IGroupUserRepo {
+	return &groupUserRepoImpl{}
 }
 
 type groupUserRepoImpl struct{}
@@ -29,9 +33,9 @@ func (*groupUserRepoImpl) Add(gu *model.GroupUser) error {
 	return nil
 }
 
-func (*groupUserRepoImpl) Get(id uint) (*model.GroupUser, error) {
+func (*groupUserRepoImpl) Get(id uint64) (*model.GroupUser, error) {
 	var seq = model.GroupUser{
-		Model: gorm.Model{ID: id},
+		ID: id,
 	}
 	err := db.DB.First(&seq).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
@@ -61,7 +65,7 @@ func (*groupUserRepoImpl) Delete(gu *model.GroupUser) error {
 	return nil
 }
 
-func (*groupUserRepoImpl) GetByGroupId(id uint) ([]*model.GroupUser, error) {
+func (*groupUserRepoImpl) GetByGroupId(id uint64) ([]*model.GroupUser, error) {
 	var res []*model.GroupUser
 	err := db.DB.Where(&model.GroupUser{GroupId: id}).Find(res).Error
 	if err != nil {
@@ -71,7 +75,7 @@ func (*groupUserRepoImpl) GetByGroupId(id uint) ([]*model.GroupUser, error) {
 	return res, nil
 }
 
-func (*groupUserRepoImpl) GetByUserId(id uint) ([]*model.GroupUser, error) {
+func (*groupUserRepoImpl) GetByUserId(id uint64) ([]*model.GroupUser, error) {
 	var res []*model.GroupUser
 	err := db.DB.Where(&model.GroupUser{UserId: id}).Find(res).Error
 	if err != nil {

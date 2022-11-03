@@ -4,17 +4,25 @@ import (
 	"easy_im/internal/domain/message/model"
 	"easy_im/internal/domain/message/pkg"
 	"easy_im/internal/domain/message/repo"
-	"gorm.io/gorm"
 )
 
+var GroupService = NewGroupService()
+
+func NewGroupService() IGroupService {
+	return &groupServiceImpl{
+		groupRepo:     repo.NewGroupRepo(),
+		groupUserRepo: repo.NewGroupUserRepo(),
+	}
+}
+
 type IGroupService interface {
-	GetGroupByUserId(userId uint) ([]*model.Group, error)
-	GetUserIdInGroup(groupId uint) ([]uint, error)
-	AddUserToGroup(userId, groupId uint) error
-	RemoveUserFromGroup(userId, groupId uint) error
+	GetGroupByUserId(userId uint64) ([]*model.Group, error)
+	GetUserIdInGroup(groupId uint64) ([]uint64, error)
+	AddUserToGroup(userId, groupId uint64) error
+	RemoveUserFromGroup(userId, groupId uint64) error
 
 	CreateGroup(group *model.Group) error
-	DeleteGroup(groupId uint) error
+	DeleteGroup(groupId uint64) error
 	UpdateGroupInfo(group *model.Group) error
 }
 
@@ -23,12 +31,12 @@ type groupServiceImpl struct {
 	groupUserRepo repo.IGroupUserRepo
 }
 
-func (g *groupServiceImpl) GetGroupByUserId(userId uint) ([]*model.Group, error) {
+func (g *groupServiceImpl) GetGroupByUserId(userId uint64) ([]*model.Group, error) {
 	gus, err := g.groupUserRepo.GetByUserId(userId)
 	if err != nil {
 		return nil, pkg.ErrUnknown
 	}
-	gIds := make([]uint, len(gus))
+	gIds := make([]uint64, len(gus))
 	for i, gu := range gus {
 		gIds[i] = gu.GroupId
 	}
@@ -39,19 +47,19 @@ func (g *groupServiceImpl) GetGroupByUserId(userId uint) ([]*model.Group, error)
 	return groups, nil
 }
 
-func (g *groupServiceImpl) GetUserIdInGroup(groupId uint) ([]uint, error) {
+func (g *groupServiceImpl) GetUserIdInGroup(groupId uint64) ([]uint64, error) {
 	gus, err := g.groupUserRepo.GetByGroupId(groupId)
 	if err != nil {
 		return nil, pkg.ErrUnknown
 	}
-	uIds := make([]uint, len(gus))
+	uIds := make([]uint64, len(gus))
 	for i, gu := range gus {
 		uIds[i] = gu.UserId
 	}
 	return uIds, nil
 }
 
-func (g *groupServiceImpl) AddUserToGroup(userId, groupId uint) error {
+func (g *groupServiceImpl) AddUserToGroup(userId, groupId uint64) error {
 	err := g.groupUserRepo.Add(&model.GroupUser{GroupId: groupId, UserId: userId})
 	if err != nil {
 		return pkg.ErrUnknown
@@ -59,7 +67,7 @@ func (g *groupServiceImpl) AddUserToGroup(userId, groupId uint) error {
 	return nil
 }
 
-func (g *groupServiceImpl) RemoveUserFromGroup(userId, groupId uint) error {
+func (g *groupServiceImpl) RemoveUserFromGroup(userId, groupId uint64) error {
 	err := g.groupUserRepo.Delete(&model.GroupUser{GroupId: groupId, UserId: userId})
 	if err != nil {
 		return pkg.ErrUnknown
@@ -75,8 +83,8 @@ func (g *groupServiceImpl) CreateGroup(group *model.Group) error {
 	return nil
 }
 
-func (g *groupServiceImpl) DeleteGroup(groupId uint) error {
-	err := g.groupRepo.Delete(&model.Group{Model: gorm.Model{ID: groupId}})
+func (g *groupServiceImpl) DeleteGroup(groupId uint64) error {
+	err := g.groupRepo.Delete(&model.Group{ID: groupId})
 	if err != nil {
 		return pkg.ErrUnknown
 	}

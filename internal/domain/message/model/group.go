@@ -5,25 +5,21 @@ import (
 	"easy_im/pkg/log"
 	"fmt"
 	"gorm.io/gorm"
+	"time"
 )
 
 type Group struct {
-	gorm.Model
-	GroupName string `gorm:"comment:群名称;type:varchar(256);not null;"`
-	OwnerId   uint   `gorm:"comment:群主;not null;"`
-	CreatorId uint   `gorm:"comment:群的创造者Id;not null;"`
-	Extra     string `gorm:"comment:拓展信息;type:varchar(256);"`
+	ID        uint64 `gorm:"primarykey"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt gorm.DeletedAt `gorm:"index"`
+	GroupName string         `gorm:"comment:群名称;type:varchar(256);not null;"`
+	OwnerId   uint64         `gorm:"comment:群主;not null;"`
+	CreatorId uint64         `gorm:"comment:群的创造者Id;not null;"`
+	Extra     string         `gorm:"comment:拓展信息;type:varchar(256);"`
 }
 
 func (*Group) TableName() string { return "group" }
-
-type GroupUser struct {
-	gorm.Model
-	GroupId uint `gorm:""`
-	UserId  uint `gorm:""`
-}
-
-func (*GroupUser) TableName() string { return "group_user" }
 
 func init() {
 	err := db.DB.AutoMigrate(&Group{}, &GroupUser{})

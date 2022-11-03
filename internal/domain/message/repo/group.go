@@ -11,15 +11,19 @@ import (
 
 type IGroupRepo interface {
 	Add(group *model.Group) error
-	Get(id uint) (*model.Group, error)
-	GetByIds(ids []uint) ([]*model.Group, error)
+	Get(id uint64) (*model.Group, error)
+	GetByIds(ids []uint64) ([]*model.Group, error)
 	Save(group *model.Group) error
 	Delete(g *model.Group) error
 }
 
+func NewGroupRepo() IGroupRepo {
+	return &groupRepoImpl{}
+}
+
 type groupRepoImpl struct{}
 
-func (*groupRepoImpl) GetByIds(ids []uint) ([]*model.Group, error) {
+func (*groupRepoImpl) GetByIds(ids []uint64) ([]*model.Group, error) {
 	var res []*model.Group
 	err := db.DB.Where(ids).Find(res).Error
 	if err != nil {
@@ -38,9 +42,9 @@ func (*groupRepoImpl) Add(group *model.Group) error {
 	return nil
 }
 
-func (*groupRepoImpl) Get(id uint) (*model.Group, error) {
+func (*groupRepoImpl) Get(id uint64) (*model.Group, error) {
 	var group = model.Group{
-		Model: gorm.Model{ID: id},
+		ID: id,
 	}
 	err := db.DB.First(&group).Error
 	if err != nil && err != gorm.ErrRecordNotFound {

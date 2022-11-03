@@ -13,22 +13,22 @@ import (
 
 type IUserSeqRepo interface {
 	Add(seq *model.UserSeq) error
-	Get(id uint) (*model.UserSeq, error)
+	Get(id uint64) (*model.UserSeq, error)
 	Save(seq *model.UserSeq) error
-	Delete(id uint) error
-	GetByUserId(userId uint) (*model.UserSeq, error)
+	Delete(id uint64) error
+	GetByUserId(userId uint64) (*model.UserSeq, error)
 
-	RSetUserSeq(userId uint, curSeq uint, maxSeq uint) error
-	RGetUserSeq(userId uint) (uint, error)
+	RSetUserSeq(userId uint64, curSeq uint64, maxSeq uint64) error
+	RGetUserSeq(userId uint64) (uint64, uint64, error)
 }
 
-func NewUserRepo() IUserSeqRepo {
+func NewUserSeqRepo() IUserSeqRepo {
 	return &userSeqRepoImpl{}
 }
 
 type userSeqRepoImpl struct{}
 
-func (i *userSeqRepoImpl) RSetUserSeq(userId uint, curSeq uint, maxSeq uint) error {
+func (i *userSeqRepoImpl) RSetUserSeq(userId uint64, curSeq uint64, maxSeq uint64) error {
 	key := model.BuildUserSeqKey(userId)
 	value := model.BuildSeqValue(curSeq, maxSeq)
 	_, err := redis.Client.Set(key, value, model.GetSeqTTL()).Result()
@@ -38,7 +38,7 @@ func (i *userSeqRepoImpl) RSetUserSeq(userId uint, curSeq uint, maxSeq uint) err
 	return err
 }
 
-func (i *userSeqRepoImpl) RGetUserSeq(userId uint) (uint, error) {
+func (i *userSeqRepoImpl) RGetUserSeq(userId uint64) (uint64, uint64, error) {
 	return lua.GetSeq(model.BuildUserSeqKey(userId))
 }
 
@@ -52,9 +52,9 @@ func (*userSeqRepoImpl) Add(seq *model.UserSeq) error {
 }
 
 // Get 获取用户信息
-func (*userSeqRepoImpl) Get(id uint) (*model.UserSeq, error) {
+func (*userSeqRepoImpl) Get(id uint64) (*model.UserSeq, error) {
 	var seq = model.UserSeq{
-		Model: gorm.Model{ID: id},
+		ID: id,
 	}
 	err := db.DB.First(&seq).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
@@ -77,7 +77,7 @@ func (*userSeqRepoImpl) Save(seq *model.UserSeq) error {
 	return nil
 }
 
-func (*userSeqRepoImpl) Delete(id uint) error {
+func (*userSeqRepoImpl) Delete(id uint64) error {
 	if err := db.DB.Delete(&model.UserSeq{}, id).Error; err != nil {
 		log.Error(fmt.Sprintf("Delete error :%v", err), pkg.ModuleNameRepoUserSeq)
 		return err
@@ -86,7 +86,7 @@ func (*userSeqRepoImpl) Delete(id uint) error {
 }
 
 // GetByUserId 根据用户名获取用户信息
-func (*userSeqRepoImpl) GetByUserId(userId uint) (*model.UserSeq, error) {
+func (*userSeqRepoImpl) GetByUserId(userId uint64) (*model.UserSeq, error) {
 	var user model.UserSeq
 	err := db.DB.First(&user, "user_id = ?", userId).Error
 	if err == gorm.ErrRecordNotFound {

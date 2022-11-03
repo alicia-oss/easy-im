@@ -11,9 +11,12 @@ import (
 //mysql
 
 type UserSeq struct {
-	gorm.Model
-	UserId uint `gorm:"not null;uniqueIndex;"`
-	MaxSeq uint `gorm:"not null;"`
+	ID        uint64 `gorm:"primarykey"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt gorm.DeletedAt `gorm:"index"`
+	UserId    uint64         `gorm:"not null;uniqueIndex;"`
+	MaxSeq    uint64         `gorm:"not null;"`
 }
 
 func (*UserSeq) TableName() string { return "user_seq" }
@@ -36,14 +39,14 @@ func GetSeqTTL() time.Duration {
 	return 7 * 24 * time.Hour
 }
 
-func BuildSeqValue(curSeq, maxSeq uint) string {
+func BuildSeqValue(curSeq, maxSeq uint64) string {
 	return fmt.Sprintf("%v:%v", curSeq, maxSeq)
 }
 
-func BuildUserSeqKey(userId uint) string {
+func BuildUserSeqKey(userId uint64) string {
 	return fmt.Sprintf("message:seq_user:%v", userId)
 }
 
-func BuildGroupSeqKey(groupId uint) string {
+func BuildGroupSeqKey(groupId uint64) string {
 	return fmt.Sprintf("message:seq_group:%v", groupId)
 }
