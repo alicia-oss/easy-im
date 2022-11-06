@@ -2,6 +2,7 @@ syntax = "proto3";
 package pb;
 option go_package = "./pb";
 
+import "idl/enum.proto";
 //  protoc --go_out=. ./idl/*
 // 上行数据
 message Input {
@@ -17,13 +18,6 @@ message Output {
   bytes data = 4; // 数据
 }
 
-message Message {
-  uint32 sender_id = 1;
-  string sender_name = 2;
-  uint32 receiver_id = 3;
-  string receiver_name = 4;
-  string data = 5;
-}
 
 message HeartBeatReq{
   uint32 user_id = 1;
@@ -55,15 +49,9 @@ message ListUsersResponse {
   repeated UserInfo userInfos = 1;
 }
 
-message SendMessageReq {
-  uint32 sender_id = 1;
-  uint32 receiver_id = 2;
-  string message_content = 3;
-}
 
-message SendMessageResponse {
 
-}
+
 
 message OfflineReq{
   int32 user_id = 1;
@@ -72,5 +60,92 @@ message OfflineReq{
 message OfflineResponse {
 
 }
+
+message Message {
+  uint64 msg_id = 1;
+  SessionType session_type = 2;
+  uint32 session_id = 3;
+  uint32 sender_id = 5;
+  string sender_name = 6;
+  uint64 seq = 7;
+  MessageState state = 8;
+  string sent_time = 9;
+  string deliver_time = 10;
+  string Seen_time = 11;
+  MessageType type = 12;
+  bytes data = 13;
+}
+
+//SendMessage  tcp
+message SendMessageReq {
+  uint32 receiver_id = 1;
+  MessageType type = 2;
+  bytes message_content = 3;
+  SessionType session_type = 4;
+  uint64 seq = 5;
+}
+
+message SendMessageResp {
+
+}
+
+//Sync session http
+message SyncSessionReq {
+  uint64 session_id = 1;
+  SessionType session_type = 4;
+  uint64 min_seq = 2;
+  uint64 max_seq = 3;
+
+}
+
+message SyncMessageResp {
+  repeated Message messages = 1;
+}
+
+//Sync inbox http
+message SyncInboxReq {
+
+}
+
+message SyncInboxResp {
+  repeated uint64 msg_ids = 1;
+}
+
+//GetMessageByIds http
+message GetMessagesReq {
+  repeated uint64 msg_ids = 1;
+}
+
+message GetMessagesResp {
+  repeated Message messages = 1;
+}
+
+//get session seq http
+message GetSessionSeqReq {
+  SessionType type = 1;
+  uint64 session_id = 2;
+}
+
+message GetSessionSeqResp {
+  uint64 seq = 1;
+}
+
+//seen msg http
+message SeenMsgReq {
+  uint64 msg_id = 1;
+}
+
+message SeenMsgResp {
+}
+
+//Notice receive msg tcp
+message ReceiveMsgNotice {
+  Message msg = 1;
+}
+
+message ReceiveMsgResp {
+
+}
+
 
 

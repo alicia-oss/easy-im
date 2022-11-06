@@ -1,0 +1,94 @@
+syntax = "proto3";
+package pb;
+option go_package = "./pb";
+
+import "idl/enum.proto";
+
+message User {
+  uint64 id = 1;
+  string username = 2;
+  string Nickname = 3;
+  UserState state = 4;
+
+}
+
+//auth http
+message AuthReq {
+  string username = 1;
+  string password = 2;
+}
+
+message AuthResp {
+  string token = 1;
+}
+
+//online tcp
+message OnlineReq {}
+
+message OnlineResp {
+  User info = 1;
+}
+
+//offline tcp
+message OfflineReq {
+}
+
+message OfflineResp {
+  User info = 1;
+}
+
+//get user info
+message GetUserInfoByIdsReq{
+  repeated uint64 ids = 1;
+}
+
+message GetUserInfoByIdsResp{
+  repeated User infos = 1;
+}
+
+//register
+message RegisterReq {
+  string username = 1;
+  string password = 2;
+  string nickname = 3;
+}
+
+message RegisterResp {
+}
+
+//logout
+message LogoutReq {}
+
+message LogoutResp {}
+
+//update user info
+message UpdateInfoReq {
+  string username = 1;
+  string password = 2;
+  string nickname = 3;
+}
+
+message UpdateInfoResp {}
+
+//search
+message SearchUserReq {
+  string key = 1;
+}
+
+message SearchUserResp {
+  repeated User users = 1;
+}
+
+//Notice user state change
+message UserChangeNotice {
+  User user = 1;
+}
+
+message UserChangeResp {}
+
+
+
+
+
+
+

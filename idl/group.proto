@@ -1,0 +1,28 @@
+syntax = "proto3";
+package pb;
+option go_package = "./pb";
+
+import "idl/enum.proto";
+import "idl/user.proto";
+
+message Group {
+  uint64 id = 1;
+  string name = 2;
+  uint64 Owner_id = 3;
+  repeated User members = 4;
+}
+
+//create
+
+//update
+
+//search
+
+//delete
+
+//join
+
+//exist
+
+
+

@@ -21,13 +21,13 @@ func NewUserSeqLock() IUserSeqLock {
 
 func (u *userSeqLock) Lock(userId uint64) {
 	u.lock.Lock()
-	defer u.lock.Unlock()
 
 	uLock, ok := u.m[userId]
 	if !ok {
 		uLock = &sync.Mutex{}
 		u.m[userId] = uLock
 	}
+	u.lock.Unlock()
 	uLock.Lock()
 	return
 
