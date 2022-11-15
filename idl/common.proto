@@ -10,19 +10,22 @@ message Request {
   string request_id = 1;
   string token = 2;
   bytes data = 3;
-  uint32 type = 4;
+  MessageType type = 4;
 }
 
 message Notice {
   string notice_id = 1;
   bytes data = 2;
-  uint32 type = 3;
+  NoticeType type = 3;
 }
 
 message Ack {
   AckType type = 1;
   string  id = 2;
-  uint32  code = 3;
-  string message = 4; // 错误信息
   bytes data = 5; // 数据
+}
+
+message RespBase {
+  uint32 code = 1;
+  string message = 2; // 错误信息
 }

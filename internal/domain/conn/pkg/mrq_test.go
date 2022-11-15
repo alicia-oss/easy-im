@@ -23,25 +23,25 @@ func TestMsgRetryQueue(t *testing.T) {
 		}()
 		time.Sleep(3 * time.Second)
 		queue.SubmitJob(&Job{
-			info:     "1",
-			duration: 2 * time.Second,
+			Info:     "1",
+			Duration: 2 * time.Second,
 		})
 		queue.SubmitJob(&Job{
-			info:     "2",
-			duration: 5 * time.Second,
+			Info:     "2",
+			Duration: 5 * time.Second,
 		})
 		queue.SubmitJob(&Job{
-			info:     "3",
-			duration: 2 * time.Second,
+			Info:     "3",
+			Duration: 2 * time.Second,
 		})
 		queue.SubmitJob(&Job{
-			info:     "4",
-			duration: 4 * time.Second,
+			Info:     "4",
+			Duration: 4 * time.Second,
 		})
 		time.Sleep(10 * time.Second)
 		queue.SubmitJob(&Job{
-			info:     "6",
-			duration: 3 * time.Second,
+			Info:     "6",
+			Duration: 3 * time.Second,
 		})
 		time.Sleep(6 * time.Second)
 		queue.Close()

@@ -7,8 +7,8 @@ import (
 )
 
 type Job struct {
-	info     string
-	duration time.Duration
+	Info     string
+	Duration time.Duration
 }
 
 func NewMsgRetryQueue() *MsgRetryQueue {
@@ -47,6 +47,7 @@ func (q *MsgRetryQueue) Run() {
 	}
 
 }
+
 func (q *MsgRetryQueue) Close() {
 	close(q.closeChan)
 }
@@ -54,18 +55,19 @@ func (q *MsgRetryQueue) Close() {
 func (q *MsgRetryQueue) Listen() <-chan string {
 	return q.taskChan
 }
+
 func (q *MsgRetryQueue) SubmitJob(job *Job) {
 	q.addChan <- job
 }
 
 func (q *MsgRetryQueue) addJob(job *Job) {
-	doTime := time.Now().Add(job.duration)
+	doTime := time.Now().Add(job.Duration)
 	_, v := q.tQueue.Peek()
 	if doTime.Before(q.nextTime) || v == nil {
-		q.timer.Reset(job.duration)
+		q.timer.Reset(job.Duration)
 		q.nextTime = doTime
 	}
-	q.tQueue.Push(doTime, job.info)
+	q.tQueue.Push(doTime, job.Info)
 }
 
 func (q *MsgRetryQueue) produceTask() {

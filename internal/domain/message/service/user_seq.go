@@ -8,7 +8,7 @@ import (
 	"fmt"
 )
 
-var UserService = NewUserSeqServiceImpl()
+var UserSeqService = NewUserSeqServiceImpl()
 
 type IUserSeqService interface {
 	GenSeq(userId uint64) (uint64, error)

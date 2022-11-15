@@ -23,7 +23,7 @@ func TestUser(t *testing.T) {
 		fmt.Printf("%v \n", users)
 	})
 	t.Run("service", func(t *testing.T) {
-		err := service.UserService.Auth("123456", "123456")
+		err, _ := service.UserService.Auth("123456", "123456")
 		if err != nil {
 			fmt.Println("auth", err.Error())
 		}

@@ -11,6 +11,10 @@ enum RequestType  {
   RECEIVE_MESSAGE = 5;
 }
 
+enum NoticeType {
+  Temp = 0;
+}
+
 enum MessageState {
   Sent = 0;
   DELIVERED = 1;
@@ -34,7 +38,7 @@ enum MessageType {
 }
 
 enum UserState {
-  ONLINE = 0;
-  OFFLINE = 1;
+  ON = 0;
+  OFF = 1;
   LOGOUT = 2;
 }

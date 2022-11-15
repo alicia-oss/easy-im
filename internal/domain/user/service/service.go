@@ -13,7 +13,7 @@ func init() {
 }
 
 type IUserService interface {
-	Auth(username, password string) error
+	Auth(username, password string) (error, *model.User)
 	Register(username, password, nickname string) (*model.User, error)
 	Update(user *model.User) error
 	Logout(userId uint64) error
@@ -50,18 +50,18 @@ func (u *userServiceImpl) Search(key string) ([]*model.User, error) {
 	return user, nil
 }
 
-func (u *userServiceImpl) Auth(username, password string) (err error) {
+func (u *userServiceImpl) Auth(username, password string) (err error, m *model.User) {
 	user, err := u.userRepo.GetByUsername(username)
 	if err != nil {
-		return pkg.ErrUnknown
+		return pkg.ErrUnknown, nil
 	}
 	if user == nil {
-		return pkg.ErrUserNotExist
+		return pkg.ErrUserNotExist, nil
 	}
 	if user.Password != password {
-		return pkg.ErrWrongPassword
+		return pkg.ErrWrongPassword, nil
 	}
-	return nil
+	return nil, user
 }
 
 func (u *userServiceImpl) Register(username, password, nickname string) (*model.User, error) {
