@@ -23,6 +23,11 @@ func JWTAuth() gin.HandlerFunc {
 			context.JSON(http.StatusOK, pkg.UserError(err))
 			return
 		}
+		// 续签
+		token, err := jwt.RenewToken(c)
+		if err == nil {
+			context.Request.Header.Set(pkg.HeaderToken, token)
+		}
 		context.Set(pkg.CTXUserId, c.UserId)
 		context.Set(pkg.CTXUserName, c.UserName)
 		context.Next()

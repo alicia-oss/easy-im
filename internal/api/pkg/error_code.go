@@ -25,7 +25,7 @@ func UserError(err error) *pb.RespBase {
 
 func Success() *pb.RespBase {
 	return &pb.RespBase{
-		Code:    0,
+		Code:    00000,
 		Message: "success",
 	}
 }

@@ -11,4 +11,5 @@ var (
 	ErrUnknown       = errors.New("unknown internal error")
 	ErrUserNotExist  = errors.New("user not exist")
 	ErrWrongPassword = errors.New("wrong password")
+	ErrUsernameUsed  = errors.New("username has been used")
 )

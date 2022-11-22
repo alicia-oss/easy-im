@@ -55,3 +55,17 @@ func DecodeToken(token string) (*ImClaims, error) {
 	claims := t.Claims.(*ImClaims)
 	return claims, err
 }
+
+func RenewToken(claims *ImClaims) (string, error) {
+	// 若token过期不超过10分钟则给它续签
+	if withinLimit(claims.ExpiresAt, 600) {
+		return GenToken(claims.UserId, claims.UserName)
+	}
+	return "", errors.New("do not need to renew")
+}
+
+// 计算过期时间是否超过l
+func withinLimit(s int64, l int64) bool {
+	e := time.Now().Unix()
+	return e-s < l
+}

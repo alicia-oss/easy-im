@@ -70,6 +70,13 @@ func (u *userServiceImpl) Register(username, password, nickname string) (*model.
 		Password: password,
 		Nickname: nickname,
 	}
+	t, err := u.userRepo.GetByUsername(username)
+	if err != nil {
+		return nil, pkg.ErrUnknown
+	}
+	if t != nil {
+		return nil, pkg.ErrUsernameUsed
+	}
 	if err := u.userRepo.Add(user); err != nil {
 		return nil, pkg.ErrUnknown
 	}

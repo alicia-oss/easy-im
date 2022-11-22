@@ -39,7 +39,6 @@ message OfflineReq {
 
 message OfflineResp {
   RespBase base = 1;
-  User info = 2;
 }
 
 //get user info
@@ -63,17 +62,16 @@ message RegisterResp {
   RespBase base = 1;
 }
 
-//logout
+//logout http
 message LogoutReq {}
 
 message LogoutResp {
   RespBase base = 1;
 }
 
-//update user info
+//update user info http
 message UpdateInfoReq {
-  string username = 1;
-  string password = 2;
+  uint64 userId = 2;
   string nickname = 3;
 }
 
@@ -81,7 +79,16 @@ message UpdateInfoResp {
   RespBase base = 1;
 }
 
-//search
+message UpdateUserPasswordReq {
+  uint64 userId = 2;
+  string password = 3;
+}
+
+message UpdateUserPasswordResp {
+  RespBase base = 1;
+}
+
+//search http
 message SearchUserReq {
   string key = 1;
 }
@@ -91,14 +98,15 @@ message SearchUserResp {
   repeated User users = 2;
 }
 
-//Notice user state change
-message UserChangeNotice {
-  User user = 1;
-}
-
-message UserChangeResp {
-  RespBase base = 1;
-}
+// just notice changes of message state
+////Notice user state change
+//message UserChangeNotice {
+//  User user = 1;
+//}
+//
+//message UserChangeResp {
+//  RespBase base = 1;
+//}
 
 
 

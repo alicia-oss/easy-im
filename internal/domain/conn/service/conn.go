@@ -20,6 +20,7 @@ type IConnService interface {
 	SendAck(userId uint64, id string, data []byte) error
 	OnlineUser(userId uint64, conn adapter.IConnection)
 	OfflineUser(userId uint64) error
+	GetUserState(userId uint64) bool
 }
 
 func NewConnService(retryTime time.Duration) IConnService {
@@ -128,4 +129,9 @@ func (r *connServiceImpl) addRetry(noticeId string) {
 		Info:     noticeId,
 		Duration: r.retryDuration,
 	})
+}
+
+func (r *connServiceImpl) GetUserState(userId uint64) bool {
+	_, b := r.connManager.GetConnById(userId)
+	return b
 }

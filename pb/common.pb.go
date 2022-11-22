@@ -20,6 +20,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+//request ,notice, ack are for tcp conn
 type Request struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -217,6 +218,7 @@ func (x *Ack) GetData() []byte {
 	return nil
 }
 
+// for tcp and http
 type RespBase struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
