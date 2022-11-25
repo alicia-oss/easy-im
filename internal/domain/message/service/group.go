@@ -6,8 +6,6 @@ import (
 	"easy_im/internal/domain/message/repo"
 )
 
-var GroupService = NewGroupService()
-
 func NewGroupService() IGroupService {
 	return &groupServiceImpl{
 		groupRepo:     repo.NewGroupRepo(),

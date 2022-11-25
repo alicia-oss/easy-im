@@ -2,8 +2,8 @@ package http
 
 import (
 	"easy_im/internal/api/pkg"
+	"easy_im/internal/domain"
 	user_pkg "easy_im/internal/domain/user/pkg"
-	"easy_im/internal/domain/user/service"
 	"easy_im/pb"
 	"easy_im/pkg/jwt"
 	"easy_im/pkg/log"
@@ -25,7 +25,7 @@ func AuthHandler(ctx *gin.Context) {
 }
 
 func doAuthHandler(err error, req *pb.AuthReq) (resp *pb.AuthResp) {
-	err, user := service.UserService.Auth(req.GetUsername(), req.GetPassword())
+	err, user := domain.UserService.Auth(req.GetUsername(), req.GetPassword())
 	if err != nil {
 		switch err {
 		case user_pkg.ErrUnknown:

@@ -2,7 +2,7 @@ package tcp
 
 import (
 	"easy_im/internal/api/pkg"
-	conn "easy_im/internal/domain/conn/service"
+	"easy_im/internal/domain"
 	"easy_im/pb"
 	jinx "github.com/alicia-oss/jinx/jinx_int"
 	"google.golang.org/protobuf/proto"
@@ -14,7 +14,7 @@ func OfflineHandler(ctx jinx.IRequest, bytes []byte) {
 	r, _ := ctx.GetAttr(pkg.CTXRequestId)
 	uid, rid := u.(uint64), r.(string)
 
-	err := conn.ConnService.OfflineUser(uid)
+	err := domain.ConnService.OfflineUser(uid)
 	if err != nil {
 		resp = &pb.OfflineResp{
 			Base: pkg.UserError(err),
@@ -26,6 +26,6 @@ func OfflineHandler(ctx jinx.IRequest, bytes []byte) {
 	}
 
 	bytes, _ = proto.Marshal(resp)
-	_ = conn.ConnService.SendAck(uid, rid, bytes)
+	_ = domain.ConnService.SendAck(uid, rid, bytes)
 
 }

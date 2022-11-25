@@ -2,9 +2,8 @@ package http
 
 import (
 	"easy_im/internal/api/pkg"
-	conn "easy_im/internal/domain/conn/service"
+	"easy_im/internal/domain"
 	"easy_im/internal/domain/user/model"
-	"easy_im/internal/domain/user/service"
 	"easy_im/pb"
 	"easy_im/pkg/log"
 	"fmt"
@@ -36,7 +35,7 @@ func doGetUserInfoByIds(ctx *gin.Context, req *pb.GetUserInfoByIdsReq) (resp *pb
 }
 
 func getUserInfoByIds(uids []uint64) ([]*pb.User, error) {
-	users, err := service.UserService.GetByIds(uids)
+	users, err := domain.UserService.GetByIds(uids)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +47,7 @@ func userMoToVo(users []*model.User) []*pb.User {
 	m := map[bool]pb.UserState{true: pb.UserState_ON, false: pb.UserState_OFF}
 	vos := make([]*pb.User, len(users))
 	for i, user := range users {
-		state := m[conn.ConnService.GetUserState(user.ID)]
+		state := m[domain.ConnService.GetUserState(user.ID)]
 		vo := &pb.User{
 			Id:       user.ID,
 			Username: user.Username,

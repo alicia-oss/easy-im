@@ -11,8 +11,6 @@ import (
 	"time"
 )
 
-var ConnService = NewConnService(3 * time.Second)
-
 type IConnService interface {
 	Run()
 	Stop()

@@ -1,9 +1,8 @@
-package test
+package domain
 
 import (
 	"easy_im/internal/domain/user/model"
 	"easy_im/internal/domain/user/repo"
-	"easy_im/internal/domain/user/service"
 	"fmt"
 	"testing"
 )
@@ -23,11 +22,11 @@ func TestUser(t *testing.T) {
 		fmt.Printf("%v \n", users)
 	})
 	t.Run("service", func(t *testing.T) {
-		err, _ := service.UserService.Auth("123456", "123456")
+		err, _ := UserService.Auth("123456", "123456")
 		if err != nil {
 			fmt.Println("auth", err.Error())
 		}
-		service.UserService.Register("1234444", "123456", "test2")
+		UserService.Register("1234444", "123456", "test2")
 	})
 
 }

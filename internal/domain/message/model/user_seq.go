@@ -16,6 +16,7 @@ type UserSeq struct {
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt `gorm:"index"`
 	UserId    uint64         `gorm:"not null;uniqueIndex;"`
+	UserType  int8           `gorm:"not null;uniqueIndex;"`
 	MaxSeq    uint64         `gorm:"not null;"`
 }
 

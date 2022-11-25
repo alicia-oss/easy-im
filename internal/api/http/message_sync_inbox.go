@@ -10,26 +10,26 @@ import (
 	"net/http"
 )
 
-func LogoutHandler(ctx *gin.Context) {
-	req, resp := &pb.LogoutReq{}, &pb.LogoutResp{}
+func MessageSyncInboxHandler(ctx *gin.Context) {
+	req, resp := &pb.SyncInboxReq{}, &pb.SyncInboxResp{}
 	err := ctx.Bind(req)
 	if err != nil {
-		log.Error(fmt.Sprintf("Logout bind err:%v", err), "api_http")
+		log.Error(fmt.Sprintf("SyncInbox bind err:%v", err), "api_http")
 		return
 	}
-
-	resp = doLogout(ctx, req)
+	resp = doSyncInbox(ctx, req)
 	ctx.JSON(http.StatusOK, resp)
 }
 
-func doLogout(ctx *gin.Context, req *pb.LogoutReq) (resp *pb.LogoutResp) {
+func doSyncInbox(ctx *gin.Context, req *pb.SyncInboxReq) (resp *pb.SyncInboxResp) {
 	u, _ := ctx.Get(pkg.CTXUserId)
 	uid := u.(uint64)
-	err := domain.UserService.Logout(uid)
+	ids, err := domain.MessageService.GetMessageIdsByUserId(uid)
 	if err != nil {
 		resp.Base = pkg.InternalError(err)
 	} else {
 		resp.Base = pkg.Success()
+		resp.MsgIds = ids
 	}
 	return resp
 }

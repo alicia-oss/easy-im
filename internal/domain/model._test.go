@@ -1,4 +1,4 @@
-package test
+package domain
 
 import (
 	"easy_im/internal/domain/message/model"

@@ -152,7 +152,7 @@ func (x *Notice) GetType() NoticeType {
 	if x != nil {
 		return x.Type
 	}
-	return NoticeType_Temp
+	return NoticeType_message
 }
 
 type Ack struct {

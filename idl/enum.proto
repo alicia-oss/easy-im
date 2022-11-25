@@ -12,7 +12,9 @@ enum RequestType  {
 }
 
 enum NoticeType {
-  Temp = 0;
+  message = 0;
+  message_delivered = 1;
+  message_seen = 2;
 }
 
 enum MessageState {

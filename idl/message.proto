@@ -9,8 +9,8 @@ import "idl/common.proto";
 message Message {
   uint64 msg_id = 1;
   SessionType session_type = 2;
-  uint32 session_id = 3;
-  uint32 sender_id = 5;
+  uint64 session_id = 3;
+  uint64 sender_id = 5;
   string sender_name = 6;
   uint64 seq = 7;
   MessageState state = 8;
@@ -23,7 +23,7 @@ message Message {
 
 //SendMessage  tcp
 message SendMessageReq {
-  uint32 receiver_id = 1;
+  uint64 receiver_id = 1;
   MessageType type = 2;
   bytes message_content = 3;
   SessionType session_type = 4;
@@ -43,7 +43,7 @@ message SyncSessionReq {
 
 }
 
-message SyncMessageResp {
+message SyncSessionResp {
   RespBase base = 1;
   repeated Message messages = 2;
 }
@@ -88,12 +88,30 @@ message SeenMsgResp {
   RespBase base = 1;
 }
 
-//Notice receive msg tcp
-message ReceiveMsgNotice {
+//delivered msg http
+message ReceivedMsgReq {
+  uint64 msg_id = 1;
+}
+
+message ReceivedMsgResp {
+  RespBase base = 1;
+}
+
+//Notice receive msg
+message NewMessageNotice {
   Message msg = 1;
 }
 
-message ReceiveMsgResp {
+message  NewMessageResp {
+  RespBase base = 1;
+}
+
+message MsgStateChangeNotice {
+  uint64 msg_id = 1;
+  MessageState state = 2;
+}
+
+message MsgStateChangeResp {
   RespBase base = 1;
 }
 

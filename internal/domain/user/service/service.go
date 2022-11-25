@@ -6,10 +6,8 @@ import (
 	"easy_im/internal/domain/user/repo"
 )
 
-var UserService IUserService
-
-func init() {
-	UserService = &userServiceImpl{userRepo: repo.NewUserRepo()}
+func NewUserService() IUserService {
+	return &userServiceImpl{userRepo: repo.NewUserRepo()}
 }
 
 type IUserService interface {

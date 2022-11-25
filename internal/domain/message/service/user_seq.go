@@ -8,10 +8,8 @@ import (
 	"fmt"
 )
 
-var UserSeqService = NewUserSeqServiceImpl()
-
 type IUserSeqService interface {
-	GenSeq(userId uint64) (uint64, error)
+	GenSeq(id uint64, t int8) (uint64, error)
 	CreateSeqBox(userId uint64) error
 }
 
@@ -39,8 +37,12 @@ func (u *userSeqServiceImpl) CreateSeqBox(userId uint64) error {
 	return nil
 }
 
-func (u *userSeqServiceImpl) GenSeq(userId uint64) (uint64, error) {
-	seq, max, err := u.userSeqRepo.RGetUserSeq(userId)
+func (u *userSeqServiceImpl) GenSeq(id uint64, t int8) (uint64, error) {
+	return u.doGenSeq(id, t)
+}
+
+func (u *userSeqServiceImpl) doGenSeq(id uint64, t int8) (uint64, error) {
+	seq, max, err := u.userSeqRepo.RGetUserSeq(id, t)
 	if err != nil {
 		return 0, pkg.ErrUnknown
 	}
@@ -48,28 +50,27 @@ func (u *userSeqServiceImpl) GenSeq(userId uint64) (uint64, error) {
 		return seq, nil
 	}
 
-	info := fmt.Sprintf("redis user_seq:%v not ready, will load from db", userId)
+	info := fmt.Sprintf("redis user_seq:%v not ready, will load from db", id)
 	log.Info(info, pkg.ModuleNameRepoUserSeq)
 
-	err = u.resetSeq(userId, max)
+	err = u.resetSeq(id, max, t)
 	if err != nil {
 		return 0, err
 	}
 
-	seq, _, err = u.userSeqRepo.RGetUserSeq(userId)
+	seq, _, err = u.userSeqRepo.RGetUserSeq(id, t)
 	if seq == 0 || err != nil {
-		log.Error(fmt.Sprintf("GenSeq user_id:%v err: load error", userId), pkg.ModuleNameServiceUserSeq)
+		log.Error(fmt.Sprintf("GenSeq user_id:%v err: load error", id), pkg.ModuleNameServiceUserSeq)
 		return 0, pkg.ErrUnknown
 	}
 	return seq, nil
-
 }
 
-func (u *userSeqServiceImpl) resetSeq(userId, preMax uint64) error {
+func (u *userSeqServiceImpl) resetSeq(userId, preMax uint64, t int8) error {
 	u.lock.Lock(userId)
 	defer u.lock.UnLock(userId)
 
-	userReq, err := u.userSeqRepo.GetByUserId(userId)
+	userReq, err := u.userSeqRepo.GetByUserId(userId, t)
 	if err != nil {
 		return pkg.ErrUnknown
 	}
@@ -83,7 +84,7 @@ func (u *userSeqServiceImpl) resetSeq(userId, preMax uint64) error {
 	if err != nil {
 		return pkg.ErrUnknown
 	}
-	err = u.userSeqRepo.RSetUserSeq(userId, curSeq, userReq.MaxSeq)
+	err = u.userSeqRepo.RSetUserSeq(userId, curSeq, userReq.MaxSeq, t)
 	if err != nil {
 		return pkg.ErrUnknown
 	}

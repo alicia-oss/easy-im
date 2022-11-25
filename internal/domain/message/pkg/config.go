@@ -34,5 +34,8 @@ const (
 )
 
 var (
-	ErrUnknown = errors.New("unknown internal error")
+	ErrUnknown             = errors.New("unknown internal error")
+	MsgNotExist            = errors.New("msg not exist")
+	InvalidUserId          = errors.New("invalid user_id")
+	ErrInvalidReceiverType = errors.New("invalid receiver_type")
 )

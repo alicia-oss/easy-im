@@ -2,7 +2,7 @@ package http
 
 import (
 	"easy_im/internal/api/pkg"
-	"easy_im/internal/domain/user/service"
+	"easy_im/internal/domain"
 	"easy_im/pb"
 	"easy_im/pkg/log"
 	"fmt"
@@ -23,7 +23,7 @@ func SearchUserHandler(ctx *gin.Context) {
 }
 
 func doSearchUser(ctx *gin.Context, req *pb.SearchUserReq) (resp *pb.SearchUserResp) {
-	users, err := service.UserService.Search(req.GetKey())
+	users, err := domain.UserService.Search(req.GetKey())
 	if err != nil {
 		resp.Base = pkg.InternalError(err)
 	} else {

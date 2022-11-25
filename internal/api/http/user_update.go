@@ -2,8 +2,8 @@ package http
 
 import (
 	"easy_im/internal/api/pkg"
+	"easy_im/internal/domain"
 	userModel "easy_im/internal/domain/user/model"
-	"easy_im/internal/domain/user/service"
 	"easy_im/pb"
 	"easy_im/pkg/log"
 	"fmt"
@@ -29,7 +29,7 @@ func doUpdateInfo(ctx *gin.Context, req *pb.UpdateInfoReq) (resp *pb.UpdateInfoR
 		Nickname: req.Nickname,
 	}
 	// todo gorm不完全更新操作验证
-	err := service.UserService.Update(u)
+	err := domain.UserService.Update(u)
 	if err != nil {
 		resp.Base = pkg.InternalError(err)
 	} else {
@@ -55,7 +55,7 @@ func doUpdateUserPassword(ctx *gin.Context, req *pb.UpdateUserPasswordReq) (resp
 		ID:       req.UserId,
 		Password: req.Password,
 	}
-	err := service.UserService.Update(u)
+	err := domain.UserService.Update(u)
 	if err != nil {
 		resp.Base = pkg.InternalError(err)
 	} else {
